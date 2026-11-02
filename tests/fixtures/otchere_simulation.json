@@ -1,0 +1,345 @@
+{
+  "spec_version": "0.1.0",
+  "simulation": {
+    "id": "otchere-order-to-cash",
+    "name": "OTCHERE Order-to-Cash / Fulfillment",
+    "description": "Golden-path enterprise simulation (ISIM-CR-01 section 19, ISIM-CR-02 section 22).",
+    "entity": {
+      "id": "otchere-enterprise",
+      "name": "OTCHERE Enterprise",
+      "concept": "Organisation"
+    }
+  },
+  "model": {
+    "processes": [
+      {
+        "id": "order-to-cash",
+        "name": "Order to Cash",
+        "concept": "Process",
+        "activities": [
+          "order-validation",
+          "credit-check",
+          "inventory-allocation",
+          "fulfillment",
+          "shipment",
+          "invoicing",
+          "payment"
+        ]
+      }
+    ],
+    "activities": [
+      {
+        "id": "order-validation",
+        "name": "Order Validation",
+        "duration": {
+          "value": 3,
+          "unit": "minutes",
+          "distribution": "triangular",
+          "spread": 1
+        },
+        "resources": [
+          "validation-agent"
+        ],
+        "failure_rate": 0.01
+      },
+      {
+        "id": "credit-check",
+        "name": "Credit Check",
+        "duration": {
+          "value": 5,
+          "unit": "minutes",
+          "distribution": "triangular",
+          "spread": 2
+        },
+        "resources": [
+          "credit-analyst"
+        ],
+        "failure_rate": 0.02
+      },
+      {
+        "id": "inventory-allocation",
+        "name": "Inventory Allocation",
+        "duration": {
+          "value": 2,
+          "unit": "minutes"
+        },
+        "resources": [
+          "allocation-system"
+        ],
+        "failure_rate": 0.005
+      },
+      {
+        "id": "fulfillment",
+        "name": "Fulfillment",
+        "duration": {
+          "value": 6,
+          "unit": "minutes",
+          "distribution": "triangular",
+          "spread": 2
+        },
+        "resources": [
+          "fulfillment-worker"
+        ],
+        "failure_rate": 0.01,
+        "cost_per_execution": 1.2
+      },
+      {
+        "id": "shipment",
+        "name": "Shipment",
+        "duration": {
+          "value": 4,
+          "unit": "minutes"
+        },
+        "resources": [
+          "carrier"
+        ],
+        "failure_rate": 0.02,
+        "cost_per_execution": 3.5
+      },
+      {
+        "id": "invoicing",
+        "name": "Invoicing",
+        "duration": {
+          "value": 2,
+          "unit": "minutes"
+        },
+        "resources": [
+          "billing-system"
+        ],
+        "failure_rate": 0.005
+      },
+      {
+        "id": "payment",
+        "name": "Payment",
+        "duration": {
+          "value": 1,
+          "unit": "minutes"
+        },
+        "resources": [
+          "payment-gateway"
+        ],
+        "failure_rate": 0.003
+      }
+    ],
+    "resources": [
+      {
+        "id": "validation-agent",
+        "name": "Validation Agent",
+        "concept": "Employee",
+        "capacity": 12,
+        "cost_per_hour": 28
+      },
+      {
+        "id": "credit-analyst",
+        "name": "Credit Analyst",
+        "concept": "Employee",
+        "capacity": 15,
+        "cost_per_hour": 35
+      },
+      {
+        "id": "allocation-system",
+        "name": "Allocation System",
+        "concept": "Service",
+        "capacity": 50
+      },
+      {
+        "id": "fulfillment-worker",
+        "name": "Fulfillment Worker",
+        "concept": "Employee",
+        "capacity": 15,
+        "cost_per_hour": 24
+      },
+      {
+        "id": "carrier",
+        "name": "Carrier",
+        "concept": "Service",
+        "capacity": 20,
+        "cost_per_hour": 0
+      },
+      {
+        "id": "billing-system",
+        "name": "Billing System",
+        "concept": "Service",
+        "capacity": 50
+      },
+      {
+        "id": "payment-gateway",
+        "name": "Payment Gateway",
+        "concept": "Service",
+        "capacity": 100
+      }
+    ],
+    "queues": [
+      {
+        "id": "q-validation",
+        "activity": "order-validation",
+        "discipline": "FIFO"
+      },
+      {
+        "id": "q-credit",
+        "activity": "credit-check",
+        "discipline": "FIFO"
+      },
+      {
+        "id": "q-fulfillment",
+        "activity": "fulfillment",
+        "discipline": "FIFO"
+      },
+      {
+        "id": "q-shipment",
+        "activity": "shipment",
+        "discipline": "FIFO"
+      }
+    ],
+    "arrivals": [
+      {
+        "id": "order-arrival",
+        "process": "order-to-cash",
+        "rate": {
+          "value": 100,
+          "per": "hour",
+          "distribution": "poisson"
+        }
+      }
+    ],
+    "rules": [
+      {
+        "id": "credit-reject-route",
+        "condition": "credit_check.failed",
+        "effect": "route to exception-handling",
+        "scope": "credit-check"
+      },
+      {
+        "id": "sla-policy",
+        "condition": "cycle_time > 4h",
+        "effect": "flag SLA breach",
+        "scope": "order-to-cash"
+      }
+    ],
+    "controls": [
+      {
+        "id": "order-volume",
+        "name": "Order Volume",
+        "target": "model.arrivals[order-arrival].rate.value",
+        "range": {
+          "min": 10,
+          "max": 300
+        },
+        "unit": "orders/hour",
+        "default": 100,
+        "validation": "value >= 10 and value <= 300"
+      },
+      {
+        "id": "fulfillment-capacity",
+        "name": "Fulfillment Capacity",
+        "target": "model.resources[fulfillment-worker].capacity",
+        "range": {
+          "min": 1,
+          "max": 40
+        },
+        "unit": "workers",
+        "default": 15,
+        "validation": "integer"
+      },
+      {
+        "id": "automation",
+        "name": "Automation Level",
+        "target": "parameters.automation",
+        "range": {
+          "min": 0,
+          "max": 100
+        },
+        "unit": "percent",
+        "default": 60,
+        "validation": "value >= 0 and value <= 100"
+      }
+    ],
+    "metrics": [
+      {
+        "id": "throughput",
+        "name": "Throughput",
+        "unit": "orders/hour",
+        "source": "simulated"
+      },
+      {
+        "id": "cycle-time",
+        "name": "Cycle Time",
+        "unit": "minutes",
+        "source": "simulated"
+      },
+      {
+        "id": "backlog",
+        "name": "Backlog",
+        "unit": "orders",
+        "source": "simulated"
+      },
+      {
+        "id": "sla",
+        "name": "SLA Compliance",
+        "unit": "percent",
+        "source": "simulated"
+      },
+      {
+        "id": "resource-utilization",
+        "name": "Resource Utilization",
+        "unit": "percent",
+        "source": "simulated"
+      },
+      {
+        "id": "cost",
+        "name": "Operating Cost",
+        "unit": "usd/day",
+        "source": "simulated"
+      }
+    ]
+  },
+  "parameters": {
+    "order_rate": 100,
+    "automation": 60
+  },
+  "scenarios": [
+    {
+      "id": "baseline",
+      "name": "Baseline",
+      "baseline": true,
+      "horizon": {
+        "value": 30,
+        "unit": "days"
+      },
+      "random_seed": 42
+    },
+    {
+      "id": "demand-plus-20",
+      "name": "Demand +20%",
+      "horizon": {
+        "value": 30,
+        "unit": "days"
+      },
+      "random_seed": 42,
+      "control_overrides": {
+        "order-volume": 120
+      }
+    },
+    {
+      "id": "capacity-plus-5",
+      "name": "Fulfillment Capacity +5",
+      "control_overrides": {
+        "fulfillment-capacity": 20
+      },
+      "horizon": {
+        "value": 30,
+        "unit": "days"
+      },
+      "random_seed": 42
+    }
+  ],
+  "execution": {
+    "capability": "discrete-event",
+    "horizon": {
+      "value": 30,
+      "unit": "days"
+    },
+    "replications": 3,
+    "random_seed": 42
+  }
+}

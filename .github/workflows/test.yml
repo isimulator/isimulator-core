@@ -1,0 +1,23 @@
+name: test
+on: [push, pull_request]
+jobs:
+  conformance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Install package with dev dependencies
+        run: pip install -e .[dev]
+      - name: Conformance suite (ISIM-CR-03)
+        run: pytest -q
+      - name: Replay OTCHERE golden path via CLI
+        run: |
+          isimulator-replay tests/fixtures/otchere_simulation.json --output /tmp/otchere_result.json
+          python - <<'PY'
+          import json
+          r = json.load(open("/tmp/otchere_result.json"))
+          ids = {s["scenario"]["id"] for s in r["scenarios"]}
+          assert ids == {"baseline", "demand-plus-20", "capacity-plus-5"}, ids
+          print("golden path OK:", sorted(ids))
+          PY
