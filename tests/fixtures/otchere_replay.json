@@ -1,0 +1,335 @@
+{
+  "result_version": "0.1.0",
+  "simulation_id": "otchere-order-to-cash",
+  "spec_version": "0.1.0",
+  "capability": "discrete-event",
+  "scenarios": [
+    {
+      "scenario": {
+        "id": "baseline",
+        "name": "Baseline"
+      },
+      "metrics": [
+        {
+          "id": "throughput",
+          "name": "Throughput",
+          "unit": "orders/hour",
+          "source": "simulated",
+          "value": 92.7800925925926,
+          "stats": {
+            "replications": 3,
+            "mean": 92.7800925925926,
+            "stdev": 0.3252577589226271,
+            "min": 92.34027777777777,
+            "max": 93.11666666666666
+          }
+        },
+        {
+          "id": "cycle-time",
+          "name": "Cycle Time",
+          "unit": "minutes",
+          "source": "simulated",
+          "value": 23.062206938214803,
+          "stats": {
+            "replications": 3,
+            "mean": 23.062206938214803,
+            "stdev": 0.0059677991770371065,
+            "min": 23.053828149529103,
+            "max": 23.067273182400225
+          }
+        },
+        {
+          "id": "backlog",
+          "name": "Backlog",
+          "unit": "orders",
+          "source": "simulated",
+          "value": 37.247281211848,
+          "stats": {
+            "replications": 3,
+            "mean": 37.247281211848,
+            "stdev": 0.10721435059251812,
+            "min": 37.098018343550834,
+            "max": 37.344995595769966
+          }
+        },
+        {
+          "id": "sla",
+          "name": "SLA Compliance",
+          "unit": "percent",
+          "source": "simulated",
+          "value": 100.0,
+          "stats": {
+            "replications": 3,
+            "mean": 100.0,
+            "stdev": 0.0,
+            "min": 100.0,
+            "max": 100.0
+          }
+        },
+        {
+          "id": "resource-utilization",
+          "name": "Resource Utilization",
+          "unit": "percent",
+          "source": "simulated",
+          "value": 14.179210747688408,
+          "stats": {
+            "replications": 3,
+            "mean": 14.179210747688408,
+            "stdev": 0.0421774733742673,
+            "min": 14.120849467327501,
+            "max": 14.219062826681517
+          }
+        },
+        {
+          "id": "cost",
+          "name": "Operating Cost",
+          "unit": "usd/day",
+          "source": "simulated",
+          "value": 26635.717291414523,
+          "stats": {
+            "replications": 3,
+            "mean": 26635.717291414523,
+            "stdev": 79.42867630068218,
+            "min": 26525.790434100454,
+            "max": 26710.69162857434
+          }
+        }
+      ],
+      "provenance": {
+        "spec_version": "0.1.0",
+        "simulation_id": "otchere-order-to-cash",
+        "scenario_id": "baseline",
+        "adapter": "isimulator_core.adapter.simpy_adapter.SimPyAdapter",
+        "adapter_version": "0.1.0",
+        "engine": "SimPy",
+        "engine_version": "4.1.2",
+        "capability": "discrete-event",
+        "configuration_hash": "67efde60616b3f57",
+        "random_seed": 42,
+        "replications": 3,
+        "horizon": {
+          "value": 30,
+          "unit": "days"
+        }
+      }
+    },
+    {
+      "scenario": {
+        "id": "demand-plus-20",
+        "name": "Demand +20%"
+      },
+      "metrics": [
+        {
+          "id": "throughput",
+          "name": "Throughput",
+          "unit": "orders/hour",
+          "source": "simulated",
+          "value": 111.06111111111112,
+          "stats": {
+            "replications": 3,
+            "mean": 111.06111111111112,
+            "stdev": 0.2695470404138875,
+            "min": 110.69444444444444,
+            "max": 111.33472222222223
+          }
+        },
+        {
+          "id": "cycle-time",
+          "name": "Cycle Time",
+          "unit": "minutes",
+          "source": "simulated",
+          "value": 23.265700484002053,
+          "stats": {
+            "replications": 3,
+            "mean": 23.265700484002053,
+            "stdev": 0.02095574869758194,
+            "min": 23.240635740595863,
+            "max": 23.291927164147005
+          }
+        },
+        {
+          "id": "backlog",
+          "name": "Backlog",
+          "unit": "orders",
+          "source": "simulated",
+          "value": 44.99725972077502,
+          "stats": {
+            "replications": 3,
+            "mean": 44.99725972077502,
+            "stdev": 0.12741182020027886,
+            "min": 44.829500942847304,
+            "max": 45.13808998516035
+          }
+        },
+        {
+          "id": "sla",
+          "name": "SLA Compliance",
+          "unit": "percent",
+          "source": "simulated",
+          "value": 100.0,
+          "stats": {
+            "replications": 3,
+            "mean": 100.0,
+            "stdev": 0.0,
+            "min": 100.0,
+            "max": 100.0
+          }
+        },
+        {
+          "id": "resource-utilization",
+          "name": "Resource Utilization",
+          "unit": "percent",
+          "source": "simulated",
+          "value": 16.97621125256629,
+          "stats": {
+            "replications": 3,
+            "mean": 16.97621125256629,
+            "stdev": 0.03681113731545199,
+            "min": 16.926151516823353,
+            "max": 17.013614757279694
+          }
+        },
+        {
+          "id": "cost",
+          "name": "Operating Cost",
+          "unit": "usd/day",
+          "source": "simulated",
+          "value": 31889.17815218815,
+          "stats": {
+            "replications": 3,
+            "mean": 31889.17815218815,
+            "stdev": 67.86391426692889,
+            "min": 31797.000496804565,
+            "max": 31958.412739220097
+          }
+        }
+      ],
+      "provenance": {
+        "spec_version": "0.1.0",
+        "simulation_id": "otchere-order-to-cash",
+        "scenario_id": "demand-plus-20",
+        "adapter": "isimulator_core.adapter.simpy_adapter.SimPyAdapter",
+        "adapter_version": "0.1.0",
+        "engine": "SimPy",
+        "engine_version": "4.1.2",
+        "capability": "discrete-event",
+        "configuration_hash": "67efde60616b3f57",
+        "random_seed": 42,
+        "replications": 3,
+        "horizon": {
+          "value": 30,
+          "unit": "days"
+        }
+      }
+    },
+    {
+      "scenario": {
+        "id": "capacity-plus-5",
+        "name": "Fulfillment Capacity +5"
+      },
+      "metrics": [
+        {
+          "id": "throughput",
+          "name": "Throughput",
+          "unit": "orders/hour",
+          "source": "simulated",
+          "value": 92.51851851851852,
+          "stats": {
+            "replications": 3,
+            "mean": 92.51851851851852,
+            "stdev": 0.28952994519261654,
+            "min": 92.10972222222222,
+            "max": 92.74305555555556
+          }
+        },
+        {
+          "id": "cycle-time",
+          "name": "Cycle Time",
+          "unit": "minutes",
+          "source": "simulated",
+          "value": 23.01430012691378,
+          "stats": {
+            "replications": 3,
+            "mean": 23.01430012691378,
+            "stdev": 0.0031401679104435067,
+            "min": 23.009870873355684,
+            "max": 23.016792722121284
+          }
+        },
+        {
+          "id": "backlog",
+          "name": "Backlog",
+          "unit": "orders",
+          "source": "simulated",
+          "value": 37.068831459837384,
+          "stats": {
+            "replications": 3,
+            "mean": 37.068831459837384,
+            "stdev": 0.11189970498046188,
+            "min": 36.91293197669004,
+            "max": 37.17031478014156
+          }
+        },
+        {
+          "id": "sla",
+          "name": "SLA Compliance",
+          "unit": "percent",
+          "source": "simulated",
+          "value": 100.0,
+          "stats": {
+            "replications": 3,
+            "mean": 100.0,
+            "stdev": 0.0,
+            "min": 100.0,
+            "max": 100.0
+          }
+        },
+        {
+          "id": "resource-utilization",
+          "name": "Resource Utilization",
+          "unit": "percent",
+          "source": "simulated",
+          "value": 13.874405592444047,
+          "stats": {
+            "replications": 3,
+            "mean": 13.874405592444047,
+            "stdev": 0.04167572741270062,
+            "min": 13.816451144893934,
+            "max": 13.91267049030563
+          }
+        },
+        {
+          "id": "cost",
+          "name": "Operating Cost",
+          "unit": "usd/day",
+          "source": "simulated",
+          "value": 26560.191618237255,
+          "stats": {
+            "replications": 3,
+            "mean": 26560.191618237255,
+            "stdev": 78.76101192805567,
+            "min": 26450.896349323044,
+            "max": 26633.436393459135
+          }
+        }
+      ],
+      "provenance": {
+        "spec_version": "0.1.0",
+        "simulation_id": "otchere-order-to-cash",
+        "scenario_id": "capacity-plus-5",
+        "adapter": "isimulator_core.adapter.simpy_adapter.SimPyAdapter",
+        "adapter_version": "0.1.0",
+        "engine": "SimPy",
+        "engine_version": "4.1.2",
+        "capability": "discrete-event",
+        "configuration_hash": "67efde60616b3f57",
+        "random_seed": 42,
+        "replications": 3,
+        "horizon": {
+          "value": 30,
+          "unit": "days"
+        }
+      }
+    }
+  ]
+}
