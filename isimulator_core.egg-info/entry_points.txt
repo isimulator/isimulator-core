@@ -1,2 +1,0 @@
-[console_scripts]
-isimulator-replay = isimulator_core.replay:main
